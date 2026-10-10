@@ -84,9 +84,7 @@ def test_assist_is_only_applied_to_recovery_envs():
 
 
 def test_low_root_termination_is_suppressed_only_during_recovery_window():
-    robot = SimpleNamespace(
-        data=SimpleNamespace(root_pos_w=_tensor(torch.tensor([[0.0, 0.0, 0.1], [0.0, 0.0, 0.1]])))
-    )
+    robot = SimpleNamespace(data=SimpleNamespace(root_pos_w=_tensor(torch.tensor([[0.0, 0.0, 0.1], [0.0, 0.0, 0.1]]))))
     env = SimpleNamespace(
         num_envs=2,
         device="cpu",

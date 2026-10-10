@@ -119,9 +119,7 @@ def recovery_root_height_below_minimum(
     return failed & ~recovery_window_mask(env, window_s)
 
 
-def recovery_illegal_contact(
-    env, threshold: float, sensor_cfg: SceneEntityCfg, window_s: float = 3.0
-) -> torch.Tensor:
+def recovery_illegal_contact(env, threshold: float, sensor_cfg: SceneEntityCfg, window_s: float = 3.0) -> torch.Tensor:
     """Apply the usual trunk-contact termination outside the recovery grace window."""
     failed = env_mdp.illegal_contact(env, threshold, sensor_cfg)
     return failed & ~recovery_window_mask(env, window_s)

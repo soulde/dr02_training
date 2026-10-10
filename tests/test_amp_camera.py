@@ -3,9 +3,10 @@
 
 """Tests for the AMP RGB-D camera task variants."""
 
-import gymnasium as gym
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+import gymnasium as gym
 
 from dr02_training.tasks.amp.config.dr02.camera_env_cfg import (
     DR02AMPCameraFlatEnvCfg,
@@ -15,7 +16,6 @@ from dr02_training.tasks.amp.config.dr02.camera_env_cfg import (
 from dr02_training.tasks.amp.config.dr02.env_cfg import DR02AMPFlatEnvCfg
 from dr02_training.tasks.amp.config.dr02.recovery_env_cfg import DR02AMPRecoveryEnvCfg
 from dr02_training.tasks.amp.config.dr02.rough_env_cfg import DR02AMPRoughEnvCfg
-
 
 CAMERA_LINKS = ("d435_head_link", "d435_front_link", "d435_rear_link")
 CAMERA_JOINTS = {

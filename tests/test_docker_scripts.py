@@ -209,10 +209,7 @@ def test_entrypoint_installs_mounted_packages_without_dependency_resolution(tmp_
     uv.chmod(0o755)
     gosu = Path(env["PATH"].split(":")[0]) / "gosu"
     gosu.write_text(
-        "#!/usr/bin/env bash\n"
-        "echo \"$1\" > \"$GOSU_ID_FILE\"\n"
-        "shift\n"
-        "exec \"$@\"\n",
+        '#!/usr/bin/env bash\necho "$1" > "$GOSU_ID_FILE"\nshift\nexec "$@"\n',
         encoding="utf-8",
     )
     gosu.chmod(0o755)

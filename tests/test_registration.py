@@ -36,6 +36,21 @@ def test_task_registrations():
             ),
             "default_agent": "rsl_rl",
         },
+        "Dr02Training-AMP-Flat-Camera-v0": {
+            "entry_point": "isaaclab.envs:ManagerBasedRLEnv",
+            "env_cfg_entry_point": "dr02_training.tasks.amp.config.dr02.camera_env_cfg:DR02AMPCameraFlatEnvCfg",
+            "default_agent": "rsl_rl",
+        },
+        "Dr02Training-AMP-Rough-Camera-v0": {
+            "entry_point": "isaaclab.envs:ManagerBasedRLEnv",
+            "env_cfg_entry_point": "dr02_training.tasks.amp.config.dr02.camera_env_cfg:DR02AMPCameraRoughEnvCfg",
+            "default_agent": "rsl_rl",
+        },
+        "Dr02Training-AMP-Recovery-Camera-v0": {
+            "entry_point": "isaaclab.envs:ManagerBasedRLEnv",
+            "env_cfg_entry_point": "dr02_training.tasks.amp.config.dr02.camera_env_cfg:DR02AMPCameraRecoveryEnvCfg",
+            "default_agent": "rsl_rl",
+        },
         "Dr02Training-Tracking-Flat-v0": {
             "entry_point": "isaaclab.envs:ManagerBasedRLEnv",
             "env_cfg_entry_point": "dr02_training.tasks.tracking.config.dr02.env_cfg:DR02TrackingEnvCfg",

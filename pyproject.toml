@@ -12,7 +12,8 @@ name = "dr02_training"
 version = "0.1.0"
 description = "Isaac Lab environments for dr02_training."
 readme = "README.md"
-license = { file = "LICENSE" }
+license = "BSD-3-Clause"
+license-files = ["LICENSE", "licenses/Apache-2.0.txt"]
 authors = [{ name = "Isaac Lab Project Developers" }]
 requires-python = ">=3.12,<3.13"
 dependencies = [

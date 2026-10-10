@@ -5,6 +5,24 @@ An installable downstream Isaac Lab task package generated with a standard uv `s
 The registered tasks are:
 
 - `Dr02Training-Velocity-DR02`
+- `Dr02Training-AMP-Flat-v0`
+- `Dr02Training-AMP-Rough-v0`
+- `Dr02Training-AMP-Recovery-v0`
+- `Dr02Training-Tracking-Flat-v0`
+
+DR02 Pro URDF, MJCF, meshes, the shared robot profile, and Isaac Lab asset configuration are in the installable
+package. AMP and tracking motions remain user-provided runtime data. Set `DR02_AMP_MOTION_DIR` to a directory of
+BeyondMimic-compatible DR02 NPZ files for AMP. Set `DR02_TRACKING_MOTION_FILE` to one NPZ file for tracking, or
+override `commands.motion.motion_file` on the Isaac Lab command line. The bundled DR02 robot profile records the
+29-joint order and the 32-body reference dataset order, including the two reconstructed toe sites.
+
+The AMP recovery task samples each reset as standard AMP reference initialization (85%) or a randomized recovery
+pose (15%). Recovery poses receive a world-up force sampled from 0–450 N, linearly annealed over the default 10,000
+training iterations, and low-root/contact/orientation termination is deferred for three seconds. The recovery task
+uses the same AMP runner and policy architecture as the flat task.
+
+The AMP task uses the AMP extension in the maintained RSL-RL fork. Install that RSL-RL checkout into the target
+Isaac Lab environment after the editable task package; the base Isaac Lab RSL-RL extra alone does not provide AMP.
 
 ## Installation
 
@@ -42,6 +60,22 @@ uv run python scripts/list_envs.py --show_presets
 # Exercise an environment without a trained policy
 uv run isaaclab zero_agent --task <TASK_NAME> --num_envs 16
 uv run isaaclab random_agent --task <TASK_NAME> --num_envs 16
+
+# Run DR02 tracking with an existing local reference clip
+DR02_TRACKING_MOTION_FILE=/path/to/dr02_motion.npz uv run isaaclab zero_agent \
+  --task Dr02Training-Tracking-Flat-v0 --num_envs 4
+
+# Train DR02 AMP with an existing local motion dataset and the AMP-enabled RSL-RL fork
+DR02_AMP_MOTION_DIR=/path/to/dr02_motions uv run isaaclab train \
+  --rl_library rsl_rl --task Dr02Training-AMP-Flat-v0
+
+# Train DR02 AMP on rough terrain with the same motion dataset
+DR02_AMP_MOTION_DIR=/path/to/dr02_motions uv run isaaclab train \
+  --rl_library rsl_rl --task Dr02Training-AMP-Rough-v0
+
+# Train DR02 AMP with standard and fall-recovery episodes
+DR02_AMP_MOTION_DIR=/path/to/dr02_motions uv run isaaclab train \
+  --rl_library rsl_rl --task Dr02Training-AMP-Recovery-v0
 
 # Train and play
 uv run isaaclab train --rl_library <RL_LIBRARY> --task <TASK_NAME>

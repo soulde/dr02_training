@@ -1,0 +1,1448 @@
+{
+  "$schema": "./schemas/profile.schema.json",
+  "schema_version": 1,
+  "robot": "DeepRobotics DR02 Pro",
+  "joint_order": [
+    "waist_z_joint",
+    "waist_x_joint",
+    "waist_y_joint",
+    "left_shoulder_y_joint",
+    "left_shoulder_x_joint",
+    "left_shoulder_z_joint",
+    "left_elbow_joint",
+    "left_wrist_z_joint",
+    "left_wrist_y_joint",
+    "left_wrist_x_joint",
+    "right_shoulder_y_joint",
+    "right_shoulder_x_joint",
+    "right_shoulder_z_joint",
+    "right_elbow_joint",
+    "right_wrist_z_joint",
+    "right_wrist_y_joint",
+    "right_wrist_x_joint",
+    "left_hip_y_joint",
+    "left_hip_x_joint",
+    "left_hip_z_joint",
+    "left_knee_joint",
+    "left_ankle_y_joint",
+    "left_ankle_x_joint",
+    "right_hip_y_joint",
+    "right_hip_x_joint",
+    "right_hip_z_joint",
+    "right_knee_joint",
+    "right_ankle_y_joint",
+    "right_ankle_x_joint"
+  ],
+  "joint_groups": {
+    "waist": [
+      "waist_z_joint",
+      "waist_x_joint",
+      "waist_y_joint"
+    ],
+    "arms": [
+      "left_shoulder_y_joint",
+      "left_shoulder_x_joint",
+      "left_shoulder_z_joint",
+      "left_elbow_joint",
+      "left_wrist_z_joint",
+      "left_wrist_y_joint",
+      "left_wrist_x_joint",
+      "right_shoulder_y_joint",
+      "right_shoulder_x_joint",
+      "right_shoulder_z_joint",
+      "right_elbow_joint",
+      "right_wrist_z_joint",
+      "right_wrist_y_joint",
+      "right_wrist_x_joint"
+    ],
+    "left_leg": [
+      "left_hip_y_joint",
+      "left_hip_x_joint",
+      "left_hip_z_joint",
+      "left_knee_joint",
+      "left_ankle_y_joint",
+      "left_ankle_x_joint"
+    ],
+    "right_leg": [
+      "right_hip_y_joint",
+      "right_hip_x_joint",
+      "right_hip_z_joint",
+      "right_knee_joint",
+      "right_ankle_y_joint",
+      "right_ankle_x_joint"
+    ]
+  },
+  "joint_orders": {
+    "canonical": [
+      "waist_z_joint",
+      "waist_x_joint",
+      "waist_y_joint",
+      "left_shoulder_y_joint",
+      "left_shoulder_x_joint",
+      "left_shoulder_z_joint",
+      "left_elbow_joint",
+      "left_wrist_z_joint",
+      "left_wrist_y_joint",
+      "left_wrist_x_joint",
+      "right_shoulder_y_joint",
+      "right_shoulder_x_joint",
+      "right_shoulder_z_joint",
+      "right_elbow_joint",
+      "right_wrist_z_joint",
+      "right_wrist_y_joint",
+      "right_wrist_x_joint",
+      "left_hip_y_joint",
+      "left_hip_x_joint",
+      "left_hip_z_joint",
+      "left_knee_joint",
+      "left_ankle_y_joint",
+      "left_ankle_x_joint",
+      "right_hip_y_joint",
+      "right_hip_x_joint",
+      "right_hip_z_joint",
+      "right_knee_joint",
+      "right_ankle_y_joint",
+      "right_ankle_x_joint"
+    ],
+    "amp_motion": [
+      "waist_z_joint",
+      "waist_x_joint",
+      "waist_y_joint",
+      "left_shoulder_y_joint",
+      "left_shoulder_x_joint",
+      "left_shoulder_z_joint",
+      "left_elbow_joint",
+      "left_wrist_z_joint",
+      "left_wrist_y_joint",
+      "left_wrist_x_joint",
+      "right_shoulder_y_joint",
+      "right_shoulder_x_joint",
+      "right_shoulder_z_joint",
+      "right_elbow_joint",
+      "right_wrist_z_joint",
+      "right_wrist_y_joint",
+      "right_wrist_x_joint",
+      "left_hip_y_joint",
+      "left_hip_x_joint",
+      "left_hip_z_joint",
+      "left_knee_joint",
+      "left_ankle_y_joint",
+      "left_ankle_x_joint",
+      "right_hip_y_joint",
+      "right_hip_x_joint",
+      "right_hip_z_joint",
+      "right_knee_joint",
+      "right_ankle_y_joint",
+      "right_ankle_x_joint"
+    ],
+    "tracking": [
+      "waist_z_joint",
+      "waist_x_joint",
+      "waist_y_joint",
+      "left_shoulder_y_joint",
+      "left_shoulder_x_joint",
+      "left_shoulder_z_joint",
+      "left_elbow_joint",
+      "left_wrist_z_joint",
+      "left_wrist_y_joint",
+      "left_wrist_x_joint",
+      "right_shoulder_y_joint",
+      "right_shoulder_x_joint",
+      "right_shoulder_z_joint",
+      "right_elbow_joint",
+      "right_wrist_z_joint",
+      "right_wrist_y_joint",
+      "right_wrist_x_joint",
+      "left_hip_y_joint",
+      "left_hip_x_joint",
+      "left_hip_z_joint",
+      "left_knee_joint",
+      "left_ankle_y_joint",
+      "left_ankle_x_joint",
+      "right_hip_y_joint",
+      "right_hip_x_joint",
+      "right_hip_z_joint",
+      "right_knee_joint",
+      "right_ankle_y_joint",
+      "right_ankle_x_joint"
+    ]
+  },
+  "joints": {
+    "waist_z_joint": {
+      "type": "revolute",
+      "parent_body": "base_link",
+      "child_body": "waist_z_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limits": {
+        "position_rad": [
+          -1.7453,
+          3.6652
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "waist_x_joint": {
+      "type": "revolute",
+      "parent_body": "waist_z_link",
+      "child_body": "waist_x_link",
+      "axis_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.6981,
+          0.6981
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "waist_y_joint": {
+      "type": "revolute",
+      "parent_body": "waist_x_link",
+      "child_body": "body",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.5236,
+          1.5708
+        ],
+        "velocity_rad_s": 20.0,
+        "effort_nm": 363.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_shoulder_y_joint": {
+      "type": "revolute",
+      "parent_body": "body",
+      "child_body": "left_shoulder_y_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -3.8397,
+          1.5708
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_shoulder_x_joint": {
+      "type": "revolute",
+      "parent_body": "left_shoulder_y_link",
+      "child_body": "left_shoulder_x_link",
+      "axis_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.349066,
+          3.49066
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_shoulder_z_joint": {
+      "type": "revolute",
+      "parent_body": "left_shoulder_x_link",
+      "child_body": "left_shoulder_z_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limits": {
+        "position_rad": [
+          -2.9671,
+          2.9671
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.765
+    },
+    "left_elbow_joint": {
+      "type": "revolute",
+      "parent_body": "left_shoulder_z_link",
+      "child_body": "left_elbow_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.767945,
+          1.74533
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 1.25
+    },
+    "left_wrist_z_joint": {
+      "type": "revolute",
+      "parent_body": "left_elbow_link",
+      "child_body": "left_wrist_z_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limits": {
+        "position_rad": [
+          -2.9671,
+          2.9671
+        ],
+        "velocity_rad_s": 23.76,
+        "effort_nm": 50.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_wrist_y_joint": {
+      "type": "revolute",
+      "parent_body": "left_wrist_z_link",
+      "child_body": "left_wrist_y_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -1.5708,
+          1.5708
+        ],
+        "velocity_rad_s": 23.76,
+        "effort_nm": 50.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_wrist_x_joint": {
+      "type": "revolute",
+      "parent_body": "left_wrist_y_link",
+      "child_body": "left_wrist_x_link",
+      "axis_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -1.5708,
+          1.5708
+        ],
+        "velocity_rad_s": 23.76,
+        "effort_nm": 50.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_hand_joint": {
+      "type": "fixed",
+      "parent_body": "left_wrist_x_link",
+      "child_body": "left_hand_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "right_shoulder_y_joint": {
+      "type": "revolute",
+      "parent_body": "body",
+      "child_body": "right_shoulder_y_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -3.8397,
+          1.5708
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_shoulder_x_joint": {
+      "type": "revolute",
+      "parent_body": "right_shoulder_y_link",
+      "child_body": "right_shoulder_x_link",
+      "axis_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -3.49066,
+          0.349066
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_shoulder_z_joint": {
+      "type": "revolute",
+      "parent_body": "right_shoulder_x_link",
+      "child_body": "right_shoulder_z_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limits": {
+        "position_rad": [
+          -2.9671,
+          2.9671
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": -0.765
+    },
+    "right_elbow_joint": {
+      "type": "revolute",
+      "parent_body": "right_shoulder_z_link",
+      "child_body": "right_elbow_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.767945,
+          1.74533
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 1.25
+    },
+    "right_wrist_z_joint": {
+      "type": "revolute",
+      "parent_body": "right_elbow_link",
+      "child_body": "right_wrist_z_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limits": {
+        "position_rad": [
+          -2.9671,
+          2.9671
+        ],
+        "velocity_rad_s": 23.76,
+        "effort_nm": 50.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_wrist_y_joint": {
+      "type": "revolute",
+      "parent_body": "right_wrist_z_link",
+      "child_body": "right_wrist_y_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -1.5708,
+          1.5708
+        ],
+        "velocity_rad_s": 23.76,
+        "effort_nm": 50.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_wrist_x_joint": {
+      "type": "revolute",
+      "parent_body": "right_wrist_y_link",
+      "child_body": "right_wrist_x_link",
+      "axis_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -1.5708,
+          1.5708
+        ],
+        "velocity_rad_s": 23.76,
+        "effort_nm": 50.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_hand_joint": {
+      "type": "fixed",
+      "parent_body": "right_wrist_x_link",
+      "child_body": "right_hand_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "neck_z_joint": {
+      "type": "fixed",
+      "parent_body": "body",
+      "child_body": "neck_link"
+    },
+    "neck_y_joint": {
+      "type": "fixed",
+      "parent_body": "neck_link",
+      "child_body": "head_link"
+    },
+    "left_hip_y_joint": {
+      "type": "revolute",
+      "parent_body": "base_link",
+      "child_body": "left_hip_y_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -2.7925,
+          1.5708
+        ],
+        "velocity_rad_s": 20.0,
+        "effort_nm": 363.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_hip_x_joint": {
+      "type": "revolute",
+      "parent_body": "left_hip_y_link",
+      "child_body": "left_hip_x_link",
+      "axis_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.349066,
+          2.618
+        ],
+        "velocity_rad_s": 20.0,
+        "effort_nm": 363.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_hip_z_joint": {
+      "type": "revolute",
+      "parent_body": "left_hip_x_link",
+      "child_body": "left_hip_z_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.5236,
+          3.6652
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_knee_joint": {
+      "type": "revolute",
+      "parent_body": "left_hip_z_link",
+      "child_body": "left_knee_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.17453,
+          2.4958
+        ],
+        "velocity_rad_s": 20.0,
+        "effort_nm": 363.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_ankle_y_joint": {
+      "type": "revolute",
+      "parent_body": "left_knee_link",
+      "child_body": "left_ankle_y_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -1.0472,
+          0.7854
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "left_ankle_x_joint": {
+      "type": "revolute",
+      "parent_body": "left_ankle_y_link",
+      "child_body": "left_ankle_x_link",
+      "axis_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.61087,
+          0.61087
+        ],
+        "velocity_rad_s": 23.76,
+        "effort_nm": 50.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_hip_y_joint": {
+      "type": "revolute",
+      "parent_body": "base_link",
+      "child_body": "right_hip_y_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -2.7925,
+          1.5708
+        ],
+        "velocity_rad_s": 20.0,
+        "effort_nm": 363.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_hip_x_joint": {
+      "type": "revolute",
+      "parent_body": "right_hip_y_link",
+      "child_body": "right_hip_x_link",
+      "axis_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -2.618,
+          0.349066
+        ],
+        "velocity_rad_s": 20.0,
+        "effort_nm": 363.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_hip_z_joint": {
+      "type": "revolute",
+      "parent_body": "right_hip_x_link",
+      "child_body": "right_hip_z_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limits": {
+        "position_rad": [
+          -3.6652,
+          0.5236
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_knee_joint": {
+      "type": "revolute",
+      "parent_body": "right_hip_z_link",
+      "child_body": "right_knee_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.17453,
+          2.4958
+        ],
+        "velocity_rad_s": 20.0,
+        "effort_nm": 363.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_ankle_y_joint": {
+      "type": "revolute",
+      "parent_body": "right_knee_link",
+      "child_body": "right_ankle_y_link",
+      "axis_xyz": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -1.0472,
+          0.7854
+        ],
+        "velocity_rad_s": 19.38,
+        "effort_nm": 137.0
+      },
+      "default_position_rad": 0.0
+    },
+    "right_ankle_x_joint": {
+      "type": "revolute",
+      "parent_body": "right_ankle_y_link",
+      "child_body": "right_ankle_x_link",
+      "axis_xyz": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limits": {
+        "position_rad": [
+          -0.61087,
+          0.61087
+        ],
+        "velocity_rad_s": 23.76,
+        "effort_nm": 50.0
+      },
+      "default_position_rad": 0.0
+    },
+    "d435_head_joint": {
+      "type": "fixed",
+      "parent_body": "body",
+      "child_body": "d435_head_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "d435_front_joint": {
+      "type": "fixed",
+      "parent_body": "body",
+      "child_body": "d435_front_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "d435_rear_joint": {
+      "type": "fixed",
+      "parent_body": "body",
+      "child_body": "d435_rear_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "lidar_joint": {
+      "type": "fixed",
+      "parent_body": "body",
+      "child_body": "lidar_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "imu_head_joint": {
+      "type": "fixed",
+      "parent_body": "body",
+      "child_body": "imu_head_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "imu_base_joint": {
+      "type": "fixed",
+      "parent_body": "body",
+      "child_body": "imu_base_link",
+      "axis_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "root_body": "base_link",
+  "body_order": [
+    "base_link",
+    "waist_z_link",
+    "waist_x_link",
+    "body",
+    "left_shoulder_y_link",
+    "left_shoulder_x_link",
+    "left_shoulder_z_link",
+    "left_elbow_link",
+    "left_wrist_z_link",
+    "left_wrist_y_link",
+    "left_wrist_x_link",
+    "left_hand_link",
+    "right_shoulder_y_link",
+    "right_shoulder_x_link",
+    "right_shoulder_z_link",
+    "right_elbow_link",
+    "right_wrist_z_link",
+    "right_wrist_y_link",
+    "right_wrist_x_link",
+    "right_hand_link",
+    "neck_link",
+    "head_link",
+    "left_hip_y_link",
+    "left_hip_x_link",
+    "left_hip_z_link",
+    "left_knee_link",
+    "left_ankle_y_link",
+    "left_ankle_x_link",
+    "right_hip_y_link",
+    "right_hip_x_link",
+    "right_hip_z_link",
+    "right_knee_link",
+    "right_ankle_y_link",
+    "right_ankle_x_link",
+    "d435_head_link",
+    "d435_front_link",
+    "d435_rear_link",
+    "lidar_link",
+    "imu_head_link",
+    "imu_base_link"
+  ],
+  "body_orders": {
+    "urdf": [
+      "base_link",
+      "waist_z_link",
+      "waist_x_link",
+      "body",
+      "left_shoulder_y_link",
+      "left_shoulder_x_link",
+      "left_shoulder_z_link",
+      "left_elbow_link",
+      "left_wrist_z_link",
+      "left_wrist_y_link",
+      "left_wrist_x_link",
+      "left_hand_link",
+      "right_shoulder_y_link",
+      "right_shoulder_x_link",
+      "right_shoulder_z_link",
+      "right_elbow_link",
+      "right_wrist_z_link",
+      "right_wrist_y_link",
+      "right_wrist_x_link",
+      "right_hand_link",
+      "neck_link",
+      "head_link",
+      "left_hip_y_link",
+      "left_hip_x_link",
+      "left_hip_z_link",
+      "left_knee_link",
+      "left_ankle_y_link",
+      "left_ankle_x_link",
+      "right_hip_y_link",
+      "right_hip_x_link",
+      "right_hip_z_link",
+      "right_knee_link",
+      "right_ankle_y_link",
+      "right_ankle_x_link",
+      "d435_head_link",
+      "d435_front_link",
+      "d435_rear_link",
+      "lidar_link",
+      "imu_head_link",
+      "imu_base_link"
+    ],
+    "amp_observed": [
+      "left_ankle_y_link",
+      "left_ankle_x_link",
+      "right_ankle_y_link",
+      "right_ankle_x_link"
+    ],
+    "tracking": [
+      "base_link",
+      "body",
+      "head_link",
+      "left_wrist_x_link",
+      "right_wrist_x_link",
+      "left_ankle_x_link",
+      "right_ankle_x_link"
+    ],
+    "amp_motion": [
+      "base_link",
+      "waist_z_link",
+      "waist_x_link",
+      "body",
+      "left_shoulder_y_link",
+      "left_shoulder_x_link",
+      "left_shoulder_z_link",
+      "left_elbow_link",
+      "left_wrist_z_link",
+      "left_wrist_y_link",
+      "left_wrist_x_link",
+      "right_shoulder_y_link",
+      "right_shoulder_x_link",
+      "right_shoulder_z_link",
+      "right_elbow_link",
+      "right_wrist_z_link",
+      "right_wrist_y_link",
+      "right_wrist_x_link",
+      "left_hip_y_link",
+      "left_hip_x_link",
+      "left_hip_z_link",
+      "left_knee_link",
+      "left_ankle_y_link",
+      "left_ankle_x_link",
+      "right_hip_y_link",
+      "right_hip_x_link",
+      "right_hip_z_link",
+      "right_knee_link",
+      "right_ankle_y_link",
+      "right_ankle_x_link",
+      "left_toe_link",
+      "right_toe_link"
+    ]
+  },
+  "bodies": {
+    "base_link": {
+      "parent_body": null,
+      "parent_joint": null,
+      "roles": [
+        "root"
+      ]
+    },
+    "waist_z_link": {
+      "parent_body": "base_link",
+      "parent_joint": "waist_z_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "waist_x_link": {
+      "parent_body": "waist_z_link",
+      "parent_joint": "waist_x_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "body": {
+      "parent_body": "waist_x_link",
+      "parent_joint": "waist_y_joint",
+      "roles": [
+        "key"
+      ]
+    },
+    "left_shoulder_y_link": {
+      "parent_body": "body",
+      "parent_joint": "left_shoulder_y_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_shoulder_x_link": {
+      "parent_body": "left_shoulder_y_link",
+      "parent_joint": "left_shoulder_x_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_shoulder_z_link": {
+      "parent_body": "left_shoulder_x_link",
+      "parent_joint": "left_shoulder_z_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_elbow_link": {
+      "parent_body": "left_shoulder_z_link",
+      "parent_joint": "left_elbow_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_wrist_z_link": {
+      "parent_body": "left_elbow_link",
+      "parent_joint": "left_wrist_z_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_wrist_y_link": {
+      "parent_body": "left_wrist_z_link",
+      "parent_joint": "left_wrist_y_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_wrist_x_link": {
+      "parent_body": "left_wrist_y_link",
+      "parent_joint": "left_wrist_x_joint",
+      "roles": [
+        "support"
+      ]
+    },
+    "left_hand_link": {
+      "parent_body": "left_wrist_x_link",
+      "parent_joint": "left_hand_joint",
+      "roles": [
+        "key"
+      ]
+    },
+    "right_shoulder_y_link": {
+      "parent_body": "body",
+      "parent_joint": "right_shoulder_y_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_shoulder_x_link": {
+      "parent_body": "right_shoulder_y_link",
+      "parent_joint": "right_shoulder_x_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_shoulder_z_link": {
+      "parent_body": "right_shoulder_x_link",
+      "parent_joint": "right_shoulder_z_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_elbow_link": {
+      "parent_body": "right_shoulder_z_link",
+      "parent_joint": "right_elbow_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_wrist_z_link": {
+      "parent_body": "right_elbow_link",
+      "parent_joint": "right_wrist_z_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_wrist_y_link": {
+      "parent_body": "right_wrist_z_link",
+      "parent_joint": "right_wrist_y_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_wrist_x_link": {
+      "parent_body": "right_wrist_y_link",
+      "parent_joint": "right_wrist_x_joint",
+      "roles": [
+        "support"
+      ]
+    },
+    "right_hand_link": {
+      "parent_body": "right_wrist_x_link",
+      "parent_joint": "right_hand_joint",
+      "roles": [
+        "key"
+      ]
+    },
+    "neck_link": {
+      "parent_body": "body",
+      "parent_joint": "neck_z_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "head_link": {
+      "parent_body": "neck_link",
+      "parent_joint": "neck_y_joint",
+      "roles": [
+        "key"
+      ]
+    },
+    "left_hip_y_link": {
+      "parent_body": "base_link",
+      "parent_joint": "left_hip_y_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_hip_x_link": {
+      "parent_body": "left_hip_y_link",
+      "parent_joint": "left_hip_x_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_hip_z_link": {
+      "parent_body": "left_hip_x_link",
+      "parent_joint": "left_hip_z_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_knee_link": {
+      "parent_body": "left_hip_z_link",
+      "parent_joint": "left_knee_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "left_ankle_y_link": {
+      "parent_body": "left_knee_link",
+      "parent_joint": "left_ankle_y_joint",
+      "roles": [
+        "support"
+      ]
+    },
+    "left_ankle_x_link": {
+      "parent_body": "left_ankle_y_link",
+      "parent_joint": "left_ankle_x_joint",
+      "roles": [
+        "support",
+        "key"
+      ]
+    },
+    "right_hip_y_link": {
+      "parent_body": "base_link",
+      "parent_joint": "right_hip_y_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_hip_x_link": {
+      "parent_body": "right_hip_y_link",
+      "parent_joint": "right_hip_x_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_hip_z_link": {
+      "parent_body": "right_hip_x_link",
+      "parent_joint": "right_hip_z_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_knee_link": {
+      "parent_body": "right_hip_z_link",
+      "parent_joint": "right_knee_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "right_ankle_y_link": {
+      "parent_body": "right_knee_link",
+      "parent_joint": "right_ankle_y_joint",
+      "roles": [
+        "support"
+      ]
+    },
+    "right_ankle_x_link": {
+      "parent_body": "right_ankle_y_link",
+      "parent_joint": "right_ankle_x_joint",
+      "roles": [
+        "support",
+        "key"
+      ]
+    },
+    "d435_head_link": {
+      "parent_body": "body",
+      "parent_joint": "d435_head_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "d435_front_link": {
+      "parent_body": "body",
+      "parent_joint": "d435_front_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "d435_rear_link": {
+      "parent_body": "body",
+      "parent_joint": "d435_rear_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "lidar_link": {
+      "parent_body": "body",
+      "parent_joint": "lidar_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "imu_head_link": {
+      "parent_body": "body",
+      "parent_joint": "imu_head_joint",
+      "roles": [
+        "contact"
+      ]
+    },
+    "imu_base_link": {
+      "parent_body": "body",
+      "parent_joint": "imu_base_joint",
+      "roles": [
+        "contact"
+      ]
+    }
+  },
+  "body_sites": {
+    "left_toe_link": "left_ankle_x_link",
+    "right_toe_link": "right_ankle_x_link"
+  },
+  "tracking_anchor_body": "base_link",
+  "default_root_height_m": 0.95,
+  "control": {
+    "control_mode": "position",
+    "action_scale_rad": 0.5,
+    "joints": {
+      "waist_z_joint": {
+        "kp": 150.0,
+        "kd": 3.0,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.0
+      },
+      "waist_x_joint": {
+        "kp": 150.0,
+        "kd": 3.0,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.0
+      },
+      "waist_y_joint": {
+        "kp": 150.0,
+        "kd": 3.0,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.0
+      },
+      "left_shoulder_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.6664750278
+      },
+      "left_shoulder_x_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.5299741328
+      },
+      "left_shoulder_z_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.5262607038
+      },
+      "left_elbow_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.1438293383
+      },
+      "left_wrist_z_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 50.0,
+        "velocity_limit_rad_s": 23.76,
+        "armature": 0.1398061365
+      },
+      "left_wrist_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 50.0,
+        "velocity_limit_rad_s": 23.76,
+        "armature": 0.0234856559
+      },
+      "left_wrist_x_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 50.0,
+        "velocity_limit_rad_s": 23.76,
+        "armature": 0.0175240059
+      },
+      "right_shoulder_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.6664750278
+      },
+      "right_shoulder_x_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.5299741328
+      },
+      "right_shoulder_z_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.5262607038
+      },
+      "right_elbow_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.1438293383
+      },
+      "right_wrist_z_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 50.0,
+        "velocity_limit_rad_s": 23.76,
+        "armature": 0.1398061365
+      },
+      "right_wrist_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 50.0,
+        "velocity_limit_rad_s": 23.76,
+        "armature": 0.0234856559
+      },
+      "right_wrist_x_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 50.0,
+        "velocity_limit_rad_s": 23.76,
+        "armature": 0.0175240059
+      },
+      "left_hip_y_joint": {
+        "kp": 500.0,
+        "kd": 8.5,
+        "effort_limit_nm": 330.0,
+        "velocity_limit_rad_s": 18.0,
+        "armature": 0.0
+      },
+      "left_hip_x_joint": {
+        "kp": 500.0,
+        "kd": 8.5,
+        "effort_limit_nm": 330.0,
+        "velocity_limit_rad_s": 18.0,
+        "armature": 0.0
+      },
+      "left_hip_z_joint": {
+        "kp": 180.0,
+        "kd": 4.0,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.0
+      },
+      "left_knee_joint": {
+        "kp": 500.0,
+        "kd": 8.5,
+        "effort_limit_nm": 330.0,
+        "velocity_limit_rad_s": 18.0,
+        "armature": 0.0
+      },
+      "left_ankle_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.0
+      },
+      "left_ankle_x_joint": {
+        "kp": 40.0,
+        "kd": 1.0,
+        "effort_limit_nm": 35.0,
+        "velocity_limit_rad_s": 20.76,
+        "armature": 0.0
+      },
+      "right_hip_y_joint": {
+        "kp": 500.0,
+        "kd": 8.5,
+        "effort_limit_nm": 330.0,
+        "velocity_limit_rad_s": 18.0,
+        "armature": 0.0
+      },
+      "right_hip_x_joint": {
+        "kp": 500.0,
+        "kd": 8.5,
+        "effort_limit_nm": 330.0,
+        "velocity_limit_rad_s": 18.0,
+        "armature": 0.0
+      },
+      "right_hip_z_joint": {
+        "kp": 180.0,
+        "kd": 4.0,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.0
+      },
+      "right_knee_joint": {
+        "kp": 500.0,
+        "kd": 8.5,
+        "effort_limit_nm": 330.0,
+        "velocity_limit_rad_s": 18.0,
+        "armature": 0.0
+      },
+      "right_ankle_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5,
+        "effort_limit_nm": 105.0,
+        "velocity_limit_rad_s": 17.38,
+        "armature": 0.0
+      },
+      "right_ankle_x_joint": {
+        "kp": 40.0,
+        "kd": 1.0,
+        "effort_limit_nm": 35.0,
+        "velocity_limit_rad_s": 20.76,
+        "armature": 0.0
+      }
+    }
+  }
+}

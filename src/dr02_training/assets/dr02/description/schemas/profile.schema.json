@@ -1,0 +1,320 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Unified robot asset and shared control profile",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema_version",
+    "robot",
+    "joint_order",
+    "joint_groups",
+    "joint_orders",
+    "joints",
+    "root_body",
+    "body_order",
+    "body_orders",
+    "bodies",
+    "body_sites",
+    "tracking_anchor_body",
+    "default_root_height_m",
+    "control"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./schemas/profile.schema.json"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "robot": {
+      "type": "string",
+      "minLength": 1
+    },
+    "joint_order": {
+      "$ref": "#/$defs/nameList",
+      "description": "Canonical controlled-joint order used by action and observation vectors."
+    },
+    "joint_groups": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_.-]*$": {
+          "$ref": "#/$defs/nameList"
+        }
+      },
+      "additionalProperties": false
+    },
+    "joint_orders": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_.-]*$": {
+          "$ref": "#/$defs/nameList"
+        }
+      },
+      "additionalProperties": false
+    },
+    "joints": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_.-]*$": {
+          "$ref": "#/$defs/joint"
+        }
+      },
+      "additionalProperties": false
+    },
+    "root_body": {
+      "type": "string",
+      "minLength": 1
+    },
+    "body_order": {
+      "$ref": "#/$defs/nameList",
+      "description": "Canonical body order."
+    },
+    "body_orders": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_.-]*$": {
+          "$ref": "#/$defs/nameList"
+        }
+      },
+      "additionalProperties": false
+    },
+    "bodies": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_.-]*$": {
+          "$ref": "#/$defs/body"
+        }
+      },
+      "additionalProperties": false
+    },
+    "body_sites": {
+      "type": "object",
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_.-]*$": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "tracking_anchor_body": {
+      "type": "string",
+      "minLength": 1
+    },
+    "default_root_height_m": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "control": {
+      "$ref": "#/$defs/control"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nameList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "joint": {
+      "type": "object",
+      "required": [
+        "type",
+        "parent_body",
+        "child_body"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "fixed",
+            "revolute",
+            "continuous",
+            "prismatic"
+          ]
+        },
+        "parent_body": {
+          "type": "string",
+          "minLength": 1
+        },
+        "child_body": {
+          "type": "string",
+          "minLength": 1
+        },
+        "axis_xyz": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "limits": {
+          "$ref": "#/$defs/jointLimits"
+        },
+        "default_position_rad": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "jointLimits": {
+      "type": "object",
+      "properties": {
+        "position_rad": {
+          "$ref": "#/$defs/limits2"
+        },
+        "position_m": {
+          "$ref": "#/$defs/limits2"
+        },
+        "velocity_rad_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "velocity_m_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "effort_nm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "effort_n": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "limits2": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "body": {
+      "type": "object",
+      "required": [
+        "parent_body",
+        "parent_joint",
+        "roles"
+      ],
+      "properties": {
+        "parent_body": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parent_joint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "roles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "root",
+              "key",
+              "support",
+              "contact",
+              "visual_only"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "control": {
+      "type": "object",
+      "required": [
+        "control_mode",
+        "action_scale_rad",
+        "joints"
+      ],
+      "properties": {
+        "control_mode": {
+          "enum": [
+            "position",
+            "velocity",
+            "effort"
+          ]
+        },
+        "action_scale_rad": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "joints": {
+          "type": "object",
+          "minProperties": 1,
+          "patternProperties": {
+            "^[A-Za-z][A-Za-z0-9_.-]*$": {
+              "$ref": "#/$defs/jointControl"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "jointControl": {
+      "type": "object",
+      "required": [
+        "kp",
+        "kd",
+        "effort_limit_nm",
+        "velocity_limit_rad_s",
+        "armature"
+      ],
+      "properties": {
+        "kp": {
+          "type": "number",
+          "minimum": 0
+        },
+        "kd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "effort_limit_nm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "velocity_limit_rad_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "armature": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

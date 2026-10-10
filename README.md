@@ -1,149 +1,151 @@
-# dr02_training
+# DR02 Training
 
-An installable downstream Isaac Lab task package generated with a standard uv `src` layout.
+An installable Isaac Lab task package for the DeepRobotics DR02 Pro. The public task package contains the adapted URDF,
+MJCF, meshes, shared robot profile, and Isaac Lab asset configuration. AMP and tracking motion data stay outside the
+repository and are supplied at runtime.
 
-The registered tasks are:
+## Tasks
 
-- `Dr02Training-Velocity-DR02`
-- `Dr02Training-AMP-Flat-v0`
-- `Dr02Training-AMP-Rough-v0`
-- `Dr02Training-AMP-Recovery-v0`
-- `Dr02Training-Tracking-Flat-v0`
+| Task ID | Description |
+| --- | --- |
+| `Dr02Training-AMP-Flat-v0` | AMP motion prior on flat terrain |
+| `Dr02Training-AMP-Rough-v0` | AMP motion prior on rough terrain |
+| `Dr02Training-AMP-Recovery-v0` | AMP with 15% randomized recovery resets, annealed upward assistance, and a 3-second recovery window |
+| `Dr02Training-AMP-Flat-Camera-v0` | Flat AMP with head/front/rear D435 RGB-D sensors |
+| `Dr02Training-AMP-Rough-Camera-v0` | Rough AMP with head/front/rear D435 RGB-D sensors |
+| `Dr02Training-AMP-Recovery-Camera-v0` | Recovery AMP with head/front/rear D435 RGB-D sensors |
+| `Dr02Training-Tracking-Flat-v0` | Reference motion tracking |
+| `Dr02Training-Velocity-DR02` | Velocity-command locomotion |
 
-DR02 Pro URDF, MJCF, meshes, the shared robot profile, and Isaac Lab asset configuration are in the installable
-package. AMP and tracking motions remain user-provided runtime data. Set `DR02_AMP_MOTION_DIR` to a directory of
-BeyondMimic-compatible DR02 NPZ files for AMP. Set `DR02_TRACKING_MOTION_FILE` to one NPZ file for tracking, or
-override `commands.motion.motion_file` on the Isaac Lab command line. The bundled DR02 robot profile records the
-29-joint order and the 32-body reference dataset order, including the two reconstructed toe sites.
+Each camera variant attaches three 640×480, 30 Hz RGB and distance-to-image-plane streams to the fixed D435 links in
+the DR02 URDF. The camera variants retain the original AMP policy, critic, and discriminator observation terms; they
+do not add camera images to the policy input.
 
-The AMP recovery task samples each reset as standard AMP reference initialization (85%) or a randomized recovery
-pose (15%). Recovery poses receive a world-up force sampled from 0–450 N, linearly annealed over the default 10,000
-training iterations, and low-root/contact/orientation termination is deferred for three seconds. The recovery task
-uses the same AMP runner and policy architecture as the flat task.
+The recovery task uses one AMP policy and the same runner architecture as flat AMP. Each reset is a reference motion
+reset with 85% probability or a randomized recovery reset with 15% probability. The recovery curriculum applies up to
+450 N of world-up assistance and anneals it over the default 10,000 training iterations. Low-root, trunk-contact, and
+orientation termination are deferred for three seconds so the policy can attempt to recover.
 
-The AMP task uses the AMP extension in the maintained RSL-RL fork. Install that RSL-RL checkout into the target
-Isaac Lab environment after the editable task package; the base Isaac Lab RSL-RL extra alone does not provide AMP.
+## Motion data
 
-## Installation
+For AMP, set `DR02_AMP_MOTION_DIR` to a directory of BeyondMimic-compatible DR02 `.npz` motion files. For tracking,
+set `DR02_TRACKING_MOTION_FILE` to one compatible `.npz` file, or override `commands.motion.motion_file` with a Hydra
+argument. The repository does not include motion datasets.
 
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then create the project environment. The default
-environment uses the Newton backend and does not install Isaac Sim:
+## Install from a clean clone
 
-```bash
-uv sync
-```
-
-This project was generated from an Isaac Lab source checkout. Its `pyproject.toml` uses editable relative paths to that
-checkout, so regenerate the project or update `[tool.uv.sources]` if either directory moves.
-
-Optional backends are available through extras. Pass the extra to each `uv run` command that needs it:
-
-```bash
-# Standalone OV PhysX
-uv run --extra ovphysx isaaclab random_agent --task <TASK_NAME> physics=ovphysx
-
-# Isaac Sim with PhysX and RTX rendering
-uv run --extra isaacsim isaaclab random_agent --task <TASK_NAME> physics=isaacsim_physx
-```
-
-The `ov` extra installs both the `ovphysx` and `ovrtx` runtimes. You can also select `ovrtx` independently when using
-Newton physics with the OVRTX renderer. Commit `pyproject.toml` and `uv.lock` so collaborators use the same environment.
-
-## Run the generated tasks
-
-Replace the placeholders below with a task listed above and a selected RL library.
+Use an installed Isaac Lab 3.0 Early Access environment with Python 3.12. The editable source entries in
+`[tool.uv.sources]` are for this repository's local development checkout; a clean clone should install into the
+already prepared Isaac Lab environment without resolving or reinstalling its simulator dependencies:
 
 ```bash
-# List this project's environments and their available presets
-uv run python scripts/list_envs.py --show_presets
-
-# Exercise an environment without a trained policy
-uv run isaaclab zero_agent --task <TASK_NAME> --num_envs 16
-uv run isaaclab random_agent --task <TASK_NAME> --num_envs 16
-
-# Run DR02 tracking with an existing local reference clip
-DR02_TRACKING_MOTION_FILE=/path/to/dr02_motion.npz uv run isaaclab zero_agent \
-  --task Dr02Training-Tracking-Flat-v0 --num_envs 4
-
-# Train DR02 AMP with an existing local motion dataset and the AMP-enabled RSL-RL fork
-DR02_AMP_MOTION_DIR=/path/to/dr02_motions uv run isaaclab train \
-  --rl_library rsl_rl --task Dr02Training-AMP-Flat-v0
-
-# Train DR02 AMP on rough terrain with the same motion dataset
-DR02_AMP_MOTION_DIR=/path/to/dr02_motions uv run isaaclab train \
-  --rl_library rsl_rl --task Dr02Training-AMP-Rough-v0
-
-# Train DR02 AMP with standard and fall-recovery episodes
-DR02_AMP_MOTION_DIR=/path/to/dr02_motions uv run isaaclab train \
-  --rl_library rsl_rl --task Dr02Training-AMP-Recovery-v0
-
-# Train and play
-uv run isaaclab train --rl_library <RL_LIBRARY> --task <TASK_NAME>
-uv run isaaclab play --rl_library <RL_LIBRARY> --task <TASK_NAME> --checkpoint latest
-
-# Distributed training
-uv run isaaclab train_multigpu --rl_library <RL_LIBRARY> --task <TASK_NAME> --num_gpus 2
-
-# Benchmark startup, runtime, training, or play
-uv run isaaclab benchmark runtime --task <TASK_NAME> --num_envs 16 --num_steps 1000
-uv run isaaclab benchmark training --rl_library <RL_LIBRARY> --task <TASK_NAME> --max_iterations 10
+source /path/to/env_isaaclab_ea/bin/activate
+python -m pip install --no-deps --editable .
 ```
 
-Use `physics=<PRESET>` to select one of the presets shown by `list_envs.py`.
-
-## Project structure
-
-Task families live in `src/dr02_training/tasks`. Within a manager-based family, task-wide MDP terms live in `mdp`, while
-robot-specific scenes, registrations, and agent configurations live in `config/dr02`. Add another robot by
-creating a sibling of `config/dr02`; add another task by creating a sibling task-family directory.
-
-## Development
-
-Run the generated registration test and code-quality checks through the project environment:
+The Isaac Lab environment must already provide Isaac Lab, Isaac Sim/Newton, Gymnasium, the Isaac Lab visualizers, and
+the RSL-RL runner dependencies. AMP also requires the public `soulde/rsl_rl` fork at the revision used by this project:
 
 ```bash
-uv run pytest
-uv run pre-commit run --all-files
+git clone https://github.com/soulde/rsl_rl.git
+git -C rsl_rl checkout --detach 8eef047f1d9b5e07d54d743387da2f0fb42791fa
+python -m pip install --no-deps --editable ./rsl_rl
 ```
 
-The test helpers under `source/isaaclab_tasks/test` in the Isaac Lab repository are not part of the installed
-`isaaclab_tasks` package. Keep test fixtures in this project and use public Isaac Lab APIs. If you copy
-`env_test_utils.py`, it becomes vendored code whose upstream changes you must track.
+The package registers tasks through the `isaaclab.tasks` entry point and installs `dr02-training-train` and
+`dr02-training-play` commands. It declares TensorBoard and Viser as runtime dependencies. `uv sync` is intended for the
+local Isaac Lab source checkout because its project source paths reference a neighboring `../IsaacLab-EA` directory.
 
-To configure VS Code or Cursor, run the `setup_python_env` task or invoke its command directly:
+## Train, smoke test, and play
+
+Run the launchers from the activated Isaac Lab environment. Training defaults to 4096 environments, 10,000 iterations,
+TensorBoard logging, Viser with at most 512 visible environments, and rendering paused while simulation and optimization
+continue. Rendering starts when the Viser viewer is opened at `http://localhost:8080`. Use `--num-envs` and
+`--max-iterations` to override the first two values.
 
 ```bash
-uv run isaaclab --editor
+DR02_AMP_MOTION_DIR=/data/dr02/motions scripts/train.sh --task Dr02Training-AMP-Flat-v0
+DR02_AMP_MOTION_DIR=/data/dr02/motions scripts/train.sh \
+  --task Dr02Training-AMP-Recovery-v0 --num-envs 2048 --max-iterations 5000
+
+# The two fixed acceptance presets run sequentially and stop at the first failure.
+DR02_AMP_MOTION_DIR=/data/dr02/motions scripts/train_smoke.sh --task Dr02Training-AMP-Recovery-v0
+
+# Play selects the latest checkpoint from the selected task; specify a file or supported selector to override it.
+scripts/play.sh --task Dr02Training-AMP-Recovery-v0
+scripts/play.sh --task Dr02Training-AMP-Recovery-v0 --checkpoint /path/to/model_10000.pt
 ```
 
-The setup command selects the active interpreter and generates a git-ignored `pyrightconfig.json`. The generated
-configuration inherits the project's checked-in Pyright settings and adds the Isaac Sim extensions, project `src` root,
-and any Isaac Lab packages discovered in the active Python environment. This supports both Pylance in VS Code and
-basedpyright in Cursor.
+`train_smoke.sh` runs 1 environment × 1 iteration and then 512 environments × 100 iterations, with distinct run names.
+Use `scripts/train.sh` for arbitrary sizes. Logs and checkpoints are written under the current working directory's
+`logs/rsl_rl/<experiment>` tree. `play.sh` requires a checkpoint for the chosen task and exits with an error if none is
+available; it does not select another task's policy.
 
-In VS Code, use Pylance and select the interpreter that ran the setup command. In Cursor, install the
-[basedpyright extension](https://marketplace.visualstudio.com/items?itemName=detachhead.basedpyright) instead of
-Pylance, select the same interpreter, and reload the window. Both language servers read `pyrightconfig.json`.
+Camera task IDs are available for training and playback using the same launchers. They enable camera sensors for
+rendering or sensor-side experiments, while the current AMP policy remains proprioceptive.
 
-When using the `isaacsim` extra, include it while generating the editor configuration so the command can discover the
-Isaac Sim installation:
+## Detached Docker workflow
+
+Docker is the reproducible AMP route when a compatible host Isaac Lab environment is not already installed. The host
+needs Docker Engine, NVIDIA Container Toolkit, a supported NVIDIA driver/GPU, and enough disk space for the simulator
+image. `docker/build.sh` builds `soulde/dr02-training:isaac-lab-3.0.0-rc1` from the local Isaac Lab 3.0.0-rc1 image;
+the scripts never pull that large base image automatically.
+
+After accepting NVIDIA's Isaac Lab license, build the project image and start a detached named container:
 
 ```bash
-uv run --extra isaacsim isaaclab --editor
+docker/build.sh
+
+ACCEPT_EULA=Y \
+DR02_MOTION_DIR=/data/dr02/motions \
+DR02_OUTPUT_DIR="$PWD/experiments/dr02-amp" \
+DR02_CONTAINER_NAME=dr02-amp-training \
+docker/run.sh
 ```
 
-For an Isaac Sim binaries installation that is not available in the project environment, provide its path explicitly:
+`run.sh` requires the base image to be present locally and the motion directory to exist. It clones the pinned public
+RSL-RL fork on the host, mounts the project and fork read-only, mounts motion data read-only, and keeps output and
+simulator caches on the host. Training logs/checkpoints go to `DR02_OUTPUT_DIR`. Viser port 8080 is published; set
+`DR02_VISER_PORT` to change the host port. The named container runs in the background and is not replaced if it
+already exists.
+
+Run training or playback inside the running container:
 
 ```bash
-# Linux
-uv run isaaclab --editor --isaac_path <isaac-sim-path>
-
-# Windows
-uv run isaaclab --editor --isaac_path <isaac-sim-path>
+docker/exec.sh dr02-training-train --task Dr02Training-AMP-Recovery-v0
+docker/exec.sh dr02-training-play --task Dr02Training-AMP-Recovery-v0 --checkpoint latest
 ```
+
+Stop and remove the container explicitly when finished. The pinned fork checkout is retained at
+`~/.cache/dr02_training/rsl_rl/<container-name>` for as long as the container can use its bind mount; after removing
+the container, remove that matching checkout if it is no longer needed:
+
+```bash
+docker stop dr02-amp-training
+docker rm dr02-amp-training
+rm -rf "$HOME/.cache/dr02_training/rsl_rl/dr02-amp-training"
+```
+
+The host output directory is independent and is not removed with the container. The image excludes motion data,
+checkpoints, credentials, and host environments. The container installs the mounted project and fork editable without
+dependency resolution, then runs as the host user's numeric UID/GID so new output files remain manageable.
 
 ## Troubleshooting
 
-If Pylance or basedpyright cannot resolve modules, confirm that the selected interpreter matches the one used to run the
-setup command, then reload the editor window. To add a missing extension or reduce indexing memory, edit the `extraPaths`
-array in the root `pyrightconfig.json`; remove simulator extension directories that the project does not use.
+- If the task cannot find motion files, check `DR02_AMP_MOTION_DIR` (host) or the `DR02_MOTION_DIR` passed to
+  `docker/run.sh`; the container receives the read-only path `/workspace/motions`.
+- If AMP imports fail, confirm the installed RSL-RL checkout is exactly
+  `8eef047f1d9b5e07d54d743387da2f0fb42791fa`.
+- If playback reports no checkpoint, verify the selected task's `logs/rsl_rl/<experiment>` directory or pass an
+  explicit checkpoint path.
+- If Viser is unreachable, check that the container is running and the configured host port (`8080` by default) is
+  published and not blocked by a firewall.
+- If Docker reports a name conflict, inspect that container and remove it explicitly if it is no longer needed.
+
+## Development checks
+
+```bash
+source ~/env_isaaclab_ea/bin/activate
+pytest -q
+pre-commit run --all-files
+```

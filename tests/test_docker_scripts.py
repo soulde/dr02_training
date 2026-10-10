@@ -25,7 +25,7 @@ def _fake_tools(tmp_path: Path) -> tuple[dict[str, str], Path]:
         "if args[:3] == ['container', 'ls', '--all']:\n"
         "    print(os.environ.get('FAKE_CONTAINERS', ''))\n"
         "elif args[:2] == ['image', 'inspect']:\n"
-        "    sys.exit(0)\n"
+        "    sys.exit(1 if os.environ.get('FAKE_IMAGE_MISSING') == '1' else 0)\n"
         "elif args and args[0] == 'inspect':\n"
         "    if os.environ.get('FAKE_INSPECT_FAIL') == '1': sys.exit(1)\n"
         "    print(os.environ.get('FAKE_RUNNING', 'true'))\n"
@@ -176,6 +176,25 @@ def test_exec_requires_existing_running_container(tmp_path):
     docker_calls = [json.loads(line) for line in calls.read_text(encoding="utf-8").splitlines()]
     assert len(docker_calls) == 4
     assert "--user" in docker_calls[-1]
+
+
+def test_build_refuses_to_pull_missing_base_image(tmp_path):
+    env, calls = _fake_tools(tmp_path)
+    env["FAKE_IMAGE_MISSING"] = "1"
+    missing = _run("build.sh", [], env)
+    assert missing.returncode != 0
+    assert "not present locally" in missing.stderr
+    docker_calls = [json.loads(line) for line in calls.read_text(encoding="utf-8").splitlines()]
+    assert len(docker_calls) == 1
+    assert docker_calls[0][:2] == ["image", "inspect"]
+
+    env["FAKE_IMAGE_MISSING"] = "0"
+    built = _run("build.sh", ["--no-cache"], env)
+    assert built.returncode == 0
+    docker_calls = [json.loads(line) for line in calls.read_text(encoding="utf-8").splitlines()]
+    assert docker_calls[-1][0] == "build"
+    assert "--no-cache" in docker_calls[-1]
+    assert docker_calls[-1][-1] == str(REPO)
 
 
 def test_entrypoint_installs_mounted_packages_without_dependency_resolution(tmp_path):

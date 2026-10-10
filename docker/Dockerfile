@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
-FROM nvcr.io/nvidia/isaac-lab:3.0.0-rc1
+ARG ISAACLAB_BASE_IMAGE=nvcr.io/nvidia/isaac-lab:3.0.0-rc1
+FROM ${ISAACLAB_BASE_IMAGE}
 
 USER root
 

@@ -13,7 +13,9 @@ if [[ ! -d "${project_dir}" || ! -d "${rsl_rl_dir}" ]]; then
     exit 1
 fi
 
-uv pip install --python "${isaaclab_python}" --no-deps --editable "${rsl_rl_dir}"
+rsl_rl_install_dir="$(mktemp -d /tmp/dr02-rsl-rl.XXXXXX)"
+cp -a -- "${rsl_rl_dir}/." "${rsl_rl_install_dir}/"
+uv pip install --python "${isaaclab_python}" --no-deps --editable "${rsl_rl_install_dir}"
 uv pip install --python "${isaaclab_python}" --no-deps --editable "${project_dir}"
 
 if [[ "$(id -u)" == "0" && "${DR02_RUN_UID:-}" =~ ^[0-9]+$ && "${DR02_RUN_GID:-}" =~ ^[0-9]+$ ]]; then

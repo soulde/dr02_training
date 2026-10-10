@@ -59,6 +59,7 @@ def build_train_request(argv: Sequence[str]) -> TrainingRequest:
     return TrainingRequest(
         backend="rsl_rl",
         task=args.task,
+        checkpoint=args.checkpoint,
         agent=args.agent,
         num_envs=args.num_envs,
         seed=args.seed,

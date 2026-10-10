@@ -60,8 +60,8 @@ local Isaac Lab source checkout because its project source paths reference a nei
 
 Run the launchers from the activated Isaac Lab environment. Training defaults to 4096 environments, 10,000 iterations,
 TensorBoard logging, Viser with at most 512 visible environments, and rendering paused while simulation and optimization
-continue. Rendering starts when the Viser viewer is opened at `http://localhost:8080`. Use `--num-envs` and
-`--max-iterations` to override the first two values.
+continue. Open `http://localhost:8080` and click the Viser `Pause Rendering` button once to resume rendering. Use
+`--num-envs` and `--max-iterations` to override the first two values.
 
 ```bash
 DR02_AMP_MOTION_DIR=/data/dr02/motions scripts/train.sh --task Dr02Training-AMP-Flat-v0
@@ -127,8 +127,9 @@ rm -rf "$HOME/.cache/dr02_training/rsl_rl/dr02-amp-training"
 ```
 
 The host output directory is independent and is not removed with the container. The image excludes motion data,
-checkpoints, credentials, and host environments. The container installs the mounted project and fork editable without
-dependency resolution, then runs as the host user's numeric UID/GID so new output files remain manageable.
+checkpoints, credentials, and host environments. The container copies the read-only fork checkout to a writable
+temporary directory for its setuptools editable install, installs the mounted project editable without dependency
+resolution, then runs as the host user's numeric UID/GID so new output files remain manageable.
 
 ## Troubleshooting
 

@@ -22,6 +22,8 @@ def test_train_request_defaults_and_hyphenated_overrides():
             "12",
             "--max-iterations",
             "3",
+            "--checkpoint",
+            "/tmp/resume-policy.pt",
             "--run-name",
             "smoke-minimal-test",
             "--seed",
@@ -35,6 +37,7 @@ def test_train_request_defaults_and_hyphenated_overrides():
     assert request.task == "Dr02Training-AMP-Recovery-v0"
     assert request.num_envs == 12
     assert request.max_iterations == 3
+    assert request.checkpoint == "/tmp/resume-policy.pt"
     assert request.seed == 5
     assert request.backend_args == (
         "--visualizer",

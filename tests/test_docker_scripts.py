@@ -5,6 +5,7 @@
 
 import json
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -222,6 +223,7 @@ def test_entrypoint_installs_mounted_packages_without_dependency_resolution(tmp_
     project_dir, fork_dir = tmp_path / "project", tmp_path / "rsl_rl"
     project_dir.mkdir()
     fork_dir.mkdir()
+    (fork_dir / "pyproject.toml").write_text("[build-system]\n", encoding="utf-8")
     env["ISAACLAB_PYTHON"] = str(isaaclab_python)
     env["DR02_PROJECT_MOUNT"] = str(project_dir)
     env["DR02_RSL_RL_MOUNT"] = str(fork_dir)
@@ -234,6 +236,9 @@ def test_entrypoint_installs_mounted_packages_without_dependency_resolution(tmp_
     installs = [json.loads(line) for line in Path(env["UV_CALLS"]).read_text().splitlines()]
     assert len(installs) == 2
     assert all("--no-deps" in call and "--editable" in call for call in installs)
-    assert installs[0][-1] == str(fork_dir)
+    copied_fork = Path(installs[0][-1])
+    assert copied_fork != fork_dir
+    assert (copied_fork / "pyproject.toml").is_file()
     assert installs[1][-1] == str(project_dir)
+    shutil.rmtree(copied_fork)
     assert Path(env["GOSU_ID_FILE"]).read_text().strip() == "1234:5678"

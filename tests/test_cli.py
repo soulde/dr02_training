@@ -22,6 +22,8 @@ def test_train_request_defaults_and_hyphenated_overrides():
             "12",
             "--max-iterations",
             "3",
+            "--run-name",
+            "smoke-minimal-test",
             "--seed",
             "5",
             "--rsl-rl-arg",
@@ -34,7 +36,14 @@ def test_train_request_defaults_and_hyphenated_overrides():
     assert request.num_envs == 12
     assert request.max_iterations == 3
     assert request.seed == 5
-    assert request.backend_args == ("--visualizer", "viser", "--rsl-rl-arg", "value")
+    assert request.backend_args == (
+        "--visualizer",
+        "viser",
+        "--run_name",
+        "smoke-minimal-test",
+        "--rsl-rl-arg",
+        "value",
+    )
     assert request.hydra_args == ("commands.base_velocity.ranges.lin_vel_x=[0.0,1.0]",)
 
 

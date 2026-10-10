@@ -15,6 +15,8 @@ from isaaclab_rl.entrypoints import PlaybackRequest, TrainingRequest
 
 from .visualization import VISUALIZER_MODE_ENV
 
+_RUNNER_OPTION_ALIASES = {"--run-name": "--run_name"}
+
 
 def _parse_request_args(
     argv: Sequence[str], *, training: bool
@@ -39,7 +41,9 @@ def _parse_request_args(
     while index < len(passthrough):
         token = passthrough[index]
         if token.startswith("-"):
-            backend_args.append(token)
+            option, separator, value = token.partition("=")
+            option = _RUNNER_OPTION_ALIASES.get(option, option)
+            backend_args.append(f"{option}{separator}{value}")
             if "=" not in token and index + 1 < len(passthrough) and not passthrough[index + 1].startswith("-"):
                 index += 1
                 backend_args.append(passthrough[index])

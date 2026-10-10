@@ -18,7 +18,13 @@ authors = [{ name = "Isaac Lab Project Developers" }]
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "isaaclab-dev[rsl-rl]",
+    "tensorboard>=2.21.0",
+    "viser>=1.1.1",
 ]
+
+[project.scripts]
+dr02-training-train = "dr02_training.cli:train_main"
+dr02-training-play = "dr02_training.cli:play_main"
 
 [project.entry-points."isaaclab.tasks"]
 "dr02_training" = "dr02_training.tasks"

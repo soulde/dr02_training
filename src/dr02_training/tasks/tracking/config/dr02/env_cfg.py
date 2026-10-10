@@ -31,6 +31,7 @@ from isaaclab.utils.noise import UniformNoiseCfg
 from dr02_training.assets.dr02 import DR02_PRO_CFG
 from dr02_training.assets.dr02.physics_cfg import DR02PhysicsCfg
 from dr02_training.assets.dr02.profile import JOINT_ORDER, TRACKING_ANCHOR_BODY, TRACKING_BODY_NAMES
+from dr02_training.visualization import configure_sim_visualizer
 
 from ... import mdp
 
@@ -201,3 +202,4 @@ class DR02TrackingEnvCfg(ManagerBasedRLEnvCfg):
         self.sim.dt = 0.005
         self.sim.render_interval = self.decimation
         self.sim.physics = DR02PhysicsCfg()
+        configure_sim_visualizer(self.sim)

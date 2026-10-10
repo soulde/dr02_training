@@ -34,6 +34,7 @@ from isaaclab_tasks.core.velocity.mdp.rewards import track_lin_vel_xy_yaw_frame_
 from dr02_training.assets.dr02 import DR02_PRO_CFG
 from dr02_training.assets.dr02.physics_cfg import DR02PhysicsCfg
 from dr02_training.assets.dr02.profile import JOINT_ORDER
+from dr02_training.visualization import configure_sim_visualizer
 
 from ... import mdp
 
@@ -247,3 +248,4 @@ class DR02AMPFlatEnvCfg(ManagerBasedRLEnvCfg):
         self.sim.dt = 0.005
         self.sim.render_interval = self.decimation
         self.sim.physics = DR02PhysicsCfg()
+        configure_sim_visualizer(self.sim)

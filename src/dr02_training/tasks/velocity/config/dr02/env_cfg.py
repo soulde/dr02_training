@@ -24,6 +24,8 @@ from isaaclab_physx.physics import PhysxCfg
 
 from isaaclab_tasks.utils import PresetCfg
 
+from dr02_training.visualization import configure_sim_visualizer
+
 from ... import mdp
 
 ##
@@ -211,6 +213,7 @@ class VelocityEnvCfg(ManagerBasedRLEnvCfg):
         self.episode_length_s = 5
         # visualizer camera settings
         self.sim.default_visualizer_cfg = VisualizerCfg(eye=(8.0, 0.0, 5.0))
+        configure_sim_visualizer(self.sim)
         # simulation settings
         self.sim.dt = 1 / 120
         self.sim.render_interval = self.decimation

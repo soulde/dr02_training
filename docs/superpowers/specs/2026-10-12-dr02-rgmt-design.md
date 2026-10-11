@@ -11,7 +11,7 @@ Add an RGMT-style reference-motion tracking task for DR02 Pro, using the RGMT ta
 - Provide 10-frame proprioceptive histories, RGMT observation terms, reference-joint-position residual actions, and a Transformer actor with asymmetric critic through the existing RSL-RL PPO model interface.
 - Add recovery reset sampling for 15% of environments, upward assistance sampled up to 200 N and annealed over 100 million environment steps, and a 3-second termination grace period.
 - Reuse DR02's existing tracking rewards, robot profile, articulation, and physics configuration where applicable.
-- Document motion inputs, task IDs, configuration overrides, and adaptation values.
+- Document motion inputs, task IDs, configuration overrides, adaptation values, and the required `feat/rgmt-policy-reproduction` RSL-RL revision.
 
 ## Non-goals
 
@@ -22,7 +22,7 @@ Add an RGMT-style reference-motion tracking task for DR02 Pro, using the RGMT ta
 
 ## Architecture
 
-All RGMT code remains under `dr02_training.tasks.rgmt`. The task-specific model implements the same constructor and forward/distribution methods expected by the installed RSL-RL PPO runner. It uses local PyTorch attention blocks so no general RSL-RL fork changes are required. Actor inputs are current noisy proprioception, explicit proprioceptive history, and a reference command sequence. The history encoder uses causal self-attention and max pooling to form a query for cross-attention over command tokens. Actor output is a Gaussian residual around the reference joint position. The critic uses clean proprioception, the same history and command context, and privileged body state; actor and critic are independent model instances.
+All RGMT code remains under `dr02_training.tasks.rgmt`. The task-specific model implements the same constructor and forward/distribution methods expected by the RSL-RL PPO runner. It reuses the generic `MLP`, `CrossAttention`, `SinusoidalPositionalEncoding`, normalization, and distribution utilities from `rsl_rl` commit `4fc611ebdd71ec6971314ed6f5c1f4b1a7319601` (`feat/rgmt-policy-reproduction`). As in Chocolate's implementation, RGMT-specific stream selection and fusion live in a task-local actor/critic model rather than being added to generic PPO. Actor inputs are current noisy proprioception, explicit proprioceptive history, and a reference command sequence. The history encoder uses causal self-attention and max pooling to form a query for cross-attention over command tokens. Actor output is a Gaussian residual around the reference joint position. The critic uses clean proprioception, the same history and command context, and privileged body state; actor and critic are independent model instances.
 
 For 29 actuated joints, the RGMT feature contracts are 93 values per proprioceptive frame (`projected_gravity[3]`, `base_angular_velocity[3]`, relative joint positions `[29]`, joint velocities `[29]`, previous actions `[29]`) and 38 values per command frame (`base_linear_velocity[3]`, base angular velocity `[3]`, projected gravity `[3]`, reference joint positions `[29]`). The temporal lengths are 10 history frames and 21 command frames, with a 128-wide attention embedding. Command-window indices clamp to the active clip's first and last frame; reset initializes history by repeating the reset observation.
 
@@ -38,6 +38,8 @@ Recovery behavior is task-local. At reset, the configured recovery fraction sele
 - `tasks/rgmt/config/dr02/env_cfg.py` and `agents/rsl_rl_rgmt_cfg.py`: environment and PPO configuration.
 - `tasks/rgmt/config/dr02/__init__.py` and task package initializers: Gym registration and import discovery.
 - Existing registration tests and README: task entry point contracts and user-facing task/data documentation.
+
+The Chocolate reference is `feat/rgmt-policy-reproduction` at `21101894e292bfc029e3f410445dd6f796e3b8ca`. The current DR02 README documents an older fixed RSL-RL revision. RGMT setup instructions must identify the RSL-RL commit above as the required version and show an editable install of that checkout. These are documented implementation references and a runtime prerequisite; this task does not modify either separate repository or its branch.
 
 ## Failure handling
 
@@ -63,5 +65,6 @@ The temporal lengths (10, 21) and embedding width (128) follow the Chocolate RGM
 
 - DR02 and Chocolate motion exports may use different name sets and quaternion conventions; alignment must use the existing DR02 tracking conventions and known source metadata fallback.
 - The installed RSL-RL runner may make assumptions about flattened observations or stochastic distribution outputs; the custom model must honor its current `MLPModel` API exactly.
+- The local RSL-RL RGMT branch has no published remote branch at design time; the required commit must remain identifiable and available to the user's environment for reproducible installation.
 - Recovery force application depends on the Isaac Lab 3.0 Early Access articulation API and must be represented without changing the current AMP recovery implementation.
 - Multi-clip datasets can consume substantial GPU memory if all arrays are copied to device. The loader should keep only the tensors needed for training and move them once, with clip counts and frame totals logged.

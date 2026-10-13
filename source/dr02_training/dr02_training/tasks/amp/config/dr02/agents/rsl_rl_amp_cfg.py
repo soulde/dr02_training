@@ -16,6 +16,7 @@ class RslRlAMPAlgorithmCfg(RslRlPpoAlgorithmCfg):
     class_name: str = "rsl_rl.algorithms:AMP"
     motion_dir: str = os.environ.get("DR02_AMP_MOTION_DIR", "")
     motion_dataset_format: str = "beyondmimic"
+    observation_profile: str = "chocolate"
     body_names: list[str] = list(AMP_MOTION_BODY_NAMES)
     key_body_names: list[str] = list(AMP_KEY_BODY_NAMES)
     joint_names: list[str] = list(JOINT_ORDER)
@@ -27,8 +28,8 @@ class RslRlAMPAlgorithmCfg(RslRlPpoAlgorithmCfg):
     discriminator_logit_regularization_scale: float = 0.0
     discriminator_gradient_penalty_scale: float = 10.0
     discriminator_weight_decay_scale: float = 0.0
-    task_reward_lerp: float = 0.65
-    amp_reward_coef: float = 0.2
+    task_reward_scale: float = 0.8
+    style_reward_scale: float = 0.2
 
 
 @configclass

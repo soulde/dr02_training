@@ -11,6 +11,13 @@ fi
 if (( $# == 0 )); then
     set -- /bin/bash -l
 fi
+case "${1:-}" in
+    dr02-training-train|dr02-training-play)
+        isaaclab_python="${ISAACLAB_PYTHON:-/workspace/isaaclab/_isaac_sim/python.sh}"
+        launcher="/workspace/isaaclab/_isaac_sim/kit/python/bin/$1"
+        set -- "${isaaclab_python}" "${launcher}" "${@:2}"
+        ;;
+esac
 docker_args=(exec --user "$(id -u):$(id -g)" --workdir /workspace/output)
 if [[ -t 0 && -t 1 ]]; then
     docker_args+=(--interactive --tty)

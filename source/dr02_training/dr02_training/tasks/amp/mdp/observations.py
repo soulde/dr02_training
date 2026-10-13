@@ -9,7 +9,7 @@ from isaaclab.utils.math import quat_apply
 
 
 def amp_root_linear_velocity(env) -> torch.Tensor:
-    return env.scene["robot"].data.root_link_lin_vel_w.torch
+    return env.scene["robot"].data.root_link_lin_vel_b.torch
 
 
 def critic_terrain_heights(env, sensor_cfg: SceneEntityCfg) -> torch.Tensor:
@@ -20,7 +20,7 @@ def critic_terrain_heights(env, sensor_cfg: SceneEntityCfg) -> torch.Tensor:
 
 
 def amp_root_angular_velocity(env) -> torch.Tensor:
-    return env.scene["robot"].data.root_link_ang_vel_w.torch
+    return env.scene["robot"].data.root_link_ang_vel_b.torch
 
 
 def amp_joint_position(env, asset_cfg: SceneEntityCfg) -> torch.Tensor:

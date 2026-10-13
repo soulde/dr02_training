@@ -61,11 +61,11 @@ python -m pip install --no-deps --editable ./source/dr02_training
 ```
 
 The Isaac Lab environment must already provide Isaac Lab, Isaac Sim/Newton, Gymnasium, the Isaac Lab visualizers, and
-the RSL-RL runner dependencies. AMP also requires the public `soulde/rsl_rl` fork at the revision used by this project:
+the RSL-RL runner dependencies. AMP also requires the public `soulde/rsl_rl` fork at the project-pinned AMP revision:
 
 ```bash
 git clone https://github.com/soulde/rsl_rl.git
-git -C rsl_rl checkout --detach 8eef047f1d9b5e07d54d743387da2f0fb42791fa
+git -C rsl_rl checkout --detach 4c734de418193988829ea50ec4b80897e8181e13
 python -m pip install --no-deps --editable ./rsl_rl
 ```
 
@@ -172,7 +172,7 @@ dependency resolution, then runs as the host user's numeric UID/GID so new outpu
 - If the task cannot find motion files, check `DR02_AMP_MOTION_DIR` (host) or the `DR02_MOTION_DIR` passed to
   `docker/run.sh`; the container receives the read-only path `/workspace/motions`.
 - If AMP imports fail, confirm the installed RSL-RL checkout is exactly
-  `8eef047f1d9b5e07d54d743387da2f0fb42791fa`.
+  `4c734de418193988829ea50ec4b80897e8181e13`.
 - If playback reports no checkpoint, verify the selected task's `logs/rsl_rl/<experiment>` directory or pass an
   explicit checkpoint path.
 - If Viser is unreachable, check that the container is running and the configured host port (`8080` by default) is

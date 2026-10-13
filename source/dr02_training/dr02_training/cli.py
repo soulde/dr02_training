@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import os
 import sys
 from collections.abc import Callable, Sequence
@@ -13,9 +14,21 @@ from collections.abc import Callable, Sequence
 from isaaclab_rl import entrypoints
 from isaaclab_rl.entrypoints import PlaybackRequest, TrainingRequest
 
-from .visualization import VISUALIZER_MODE_ENV
-
 _RUNNER_OPTION_ALIASES = {"--run-name": "--run_name"}
+
+
+def _physics_preset(request) -> str | None:
+    """Return the selected physics preset, if one is explicit."""
+    for override in request.hydra_args:
+        key, separator, value = override.lstrip("+").partition("=")
+        if separator and key == "physics":
+            return value
+    return None
+
+
+def _requires_early_kit(request) -> bool:
+    """Whether task config resolution must happen after Kit has started."""
+    return _physics_preset(request) == "isaacsim_physx"
 
 
 def _parse_request_args(
@@ -90,6 +103,51 @@ def build_play_request(argv: Sequence[str]) -> PlaybackRequest:
 
 
 def _dispatch(mode: str, dispatch_fn: Callable, request) -> int:
+    # The package-owned CLI bypasses Isaac Lab's ``isaaclab cli train`` loader,
+    # so load this distribution's task package before resolving the Gym task ID.
+    from . import tasks as _tasks  # noqa: F401
+
+    app_launcher = None
+    if _requires_early_kit(request):
+        # Resolving this task's config imports USD Python bindings. Kit must be
+        # initialized first so its USD/PhysX schema extensions can register wrappers.
+        # The URDF importer also needs MJC schemas registered before Kit creates
+        # its first USD stage; use only the converter's plugin path, not the
+        # standalone importer's PhysX fallback schema path.
+        mjc_plugin_path = os.environ.get("DR02_MJC_PXR_PLUGIN_PATH")
+        if not mjc_plugin_path:
+            spec = importlib.util.find_spec("mujoco_usd_converter")
+            if spec is not None and spec.submodule_search_locations:
+                mjc_plugin_path = os.path.join(next(iter(spec.submodule_search_locations)), "plugins")
+        if not mjc_plugin_path or not os.path.isdir(mjc_plugin_path):
+            raise RuntimeError("The mujoco-usd-converter MJC schema plugin directory is unavailable.")
+        os.environ["PXR_PLUGINPATH_NAME"] = mjc_plugin_path
+
+        from isaaclab.app import AppLauncher
+
+        launcher_args = {"headless": True}
+        if request.device is not None:
+            launcher_args["device"] = request.device
+        if request.video:
+            launcher_args["enable_cameras"] = True
+        app_launcher = AppLauncher(launcher_args)
+    elif _physics_preset(request) in {None, "newton_mjwarp"}:
+        # Newton's standalone USD importer needs its fallback PhysX schemas.
+        # Set this before visualization/config imports load pxr; never bake it
+        # into the container environment where Kit would cache the wrong roots.
+        schema_path = os.environ.get("DR02_STANDALONE_PXR_SCHEMA_PATH")
+        if schema_path:
+            os.environ.setdefault("PXR_PLUGINPATH_NAME", schema_path)
+
+    if mode == "train":
+        from .amp_motion_compat import install_legacy_motion_compatibility
+
+        install_legacy_motion_compatibility(request.task)
+
+    # This module imports Isaac Lab's Viser implementation, which imports pxr.
+    # Keep it lazy so explicit Kit/PhysX runs can initialize Kit before USD.
+    from .visualization import VISUALIZER_MODE_ENV
+
     previous = os.environ.get(VISUALIZER_MODE_ENV)
     os.environ[VISUALIZER_MODE_ENV] = mode
     try:
@@ -102,6 +160,8 @@ def _dispatch(mode: str, dispatch_fn: Callable, request) -> int:
             os.environ.pop(VISUALIZER_MODE_ENV, None)
         else:
             os.environ[VISUALIZER_MODE_ENV] = previous
+        if app_launcher is not None:
+            app_launcher.app.close()
 
 
 def train_main(argv: Sequence[str] | None = None) -> int:

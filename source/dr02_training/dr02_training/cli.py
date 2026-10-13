@@ -139,7 +139,7 @@ def _dispatch(mode: str, dispatch_fn: Callable, request) -> int:
         if schema_path:
             os.environ.setdefault("PXR_PLUGINPATH_NAME", schema_path)
 
-    if mode == "train":
+    if mode in {"train", "play"}:
         from .amp_motion_compat import install_legacy_motion_compatibility
 
         install_legacy_motion_compatibility(request.task)

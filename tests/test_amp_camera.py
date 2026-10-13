@@ -42,7 +42,7 @@ def test_amp_camera_tasks_are_registered():
 
 
 def test_amp_camera_cfg_exposes_three_d435_streams():
-    urdf_path = Path(__file__).parents[1] / "src/dr02_training/assets/dr02/description/urdf/dr02_pro.urdf"
+    urdf_path = Path(__file__).parents[1] / "source/dr02_asset/dr02_asset/description/urdf/dr02_pro.urdf"
     urdf = ET.parse(urdf_path).getroot()
     joint_origins = {
         joint.find("child").attrib["link"]: joint.find("origin").attrib

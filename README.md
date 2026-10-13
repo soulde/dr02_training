@@ -1,8 +1,8 @@
 # DR02 Training
 
-An installable Isaac Lab task package for the DeepRobotics DR02 Pro. The public task package contains the adapted URDF,
-MJCF, meshes, shared robot profile, and Isaac Lab asset configuration. AMP and tracking motion data stay outside the
-repository and are supplied at runtime.
+An Isaac Lab project for the DeepRobotics DR02 Pro, organized as sibling `dr02_asset` and `dr02_training` packages
+under `source/`. The asset package contains the adapted URDF, MJCF, meshes, shared robot profile, and Isaac Lab asset
+configuration. AMP and tracking motion data stay outside the repository and are supplied at runtime.
 
 ## Tasks
 
@@ -15,6 +15,8 @@ repository and are supplied at runtime.
 | `Dr02Training-AMP-Rough-Camera-v0` | Rough AMP with head/front/rear D435 RGB-D sensors |
 | `Dr02Training-AMP-Recovery-Camera-v0` | Recovery AMP with head/front/rear D435 RGB-D sensors |
 | `Dr02Training-Tracking-Flat-v0` | Reference motion tracking |
+| `Dr02Training-RGMT-Flat-v0` | RGMT temporal motion tracking with a 10-frame history and 21-frame command window |
+| `Dr02Training-RGMT-Flat-Play-v0` | Single-environment playback for an RGMT checkpoint |
 | `Dr02Training-Velocity-DR02` | Velocity-command locomotion |
 
 Each camera variant attaches three 640×480, 30 Hz RGB and distance-to-image-plane streams to the fixed D435 links in
@@ -32,6 +34,20 @@ For AMP, set `DR02_AMP_MOTION_DIR` to a directory of BeyondMimic-compatible DR02
 set `DR02_TRACKING_MOTION_FILE` to one compatible `.npz` file, or override `commands.motion.motion_file` with a Hydra
 argument. The repository does not include motion datasets.
 
+RGMT accepts one `.npz` file, a directory, a quoted glob, or an explicit list through `commands.motion.motion_path`.
+`DR02_RGMT_MOTION_PATH` can provide the path by default. Each file contains `fps`, `body_pos_w`, `body_quat_w`,
+`body_lin_vel_w`, `body_ang_vel_w`, `joint_pos`, and `joint_vel`. Include `body_names` and `joint_names` arrays to align
+the clip by name. Legacy files without metadata are interpreted in the configured `AMP_MOTION_BODY_NAMES` and
+`JOINT_ORDER` source order. Body quaternions use BeyondMimic's wxyz order. RGMT loads clips in sorted path order and
+clamps the 21-frame window to each clip's boundaries; a clip remains assigned to an environment for that episode.
+
+The RGMT policy uses DR02's 29 joints, 93 proprioceptive features per frame, 38 command features per frame, and a
+128-dimensional attention embedding. Recovery defaults select 15% of reset environments, sample up to 200 N of
+upward assistance, anneal the maximum over 100 million environment steps, and allow a 3-second termination grace
+period. Attention depth, noise, PPO, and recovery pose values are project adaptations where the paper does not specify
+them for DR02. The task-specific action, observation, and effective actuator-gain contract is stored at
+`source/dr02_training/dr02_training/tasks/rgmt/deploy/rgmt/flat.json`; RGMT reads its action scale from that contract.
+
 ## Install from a clean clone
 
 Use an installed Isaac Lab 3.0 Early Access environment with Python 3.12. The editable source entries in
@@ -40,7 +56,8 @@ already prepared Isaac Lab environment without resolving or reinstalling its sim
 
 ```bash
 source /path/to/env_isaaclab_ea/bin/activate
-python -m pip install --no-deps --editable .
+python -m pip install --no-deps --editable ./source/dr02_asset
+python -m pip install --no-deps --editable ./source/dr02_training
 ```
 
 The Isaac Lab environment must already provide Isaac Lab, Isaac Sim/Newton, Gymnasium, the Isaac Lab visualizers, and
@@ -52,9 +69,22 @@ git -C rsl_rl checkout --detach 8eef047f1d9b5e07d54d743387da2f0fb42791fa
 python -m pip install --no-deps --editable ./rsl_rl
 ```
 
-The package registers tasks through the `isaaclab.tasks` entry point and installs `dr02-training-train` and
-`dr02-training-play` commands. It declares TensorBoard and Viser as runtime dependencies. `uv sync` is intended for the
-local Isaac Lab source checkout because its project source paths reference a neighboring `../IsaacLab-EA` directory.
+RGMT also requires the reusable Transformer modules from RSL-RL commit
+`4fc611ebdd71ec6971314ed6f5c1f4b1a7319601` (`feat/rgmt-policy-reproduction`). That commit is currently available in
+the local RSL-RL checkout and has no published `origin` branch. Make it available in your RSL-RL repository, then use
+a separate worktree so the general AMP checkout can stay on its own revision:
+
+```bash
+git -C /path/to/rsl_rl worktree add --detach /path/to/rsl_rl-rgmt 4fc611ebdd71ec6971314ed6f5c1f4b1a7319601
+python -m pip install --no-deps --editable /path/to/rsl_rl-rgmt
+```
+
+Install the project editable into the same Isaac Lab environment after installing the RGMT RSL-RL worktree.
+
+The training package registers tasks through the `isaaclab.tasks` entry point and installs `dr02-training-train` and
+`dr02-training-play` commands. The asset and training distributions are separate, with the training package depending
+on the asset package. The root `pyproject.toml` is a uv workspace for local development; its Isaac Lab source paths
+reference a neighboring `../IsaacLab-EA` directory.
 
 ## Train, smoke test, and play
 
@@ -74,6 +104,12 @@ DR02_AMP_MOTION_DIR=/data/dr02/motions scripts/train_smoke.sh --task Dr02Trainin
 # Play selects the latest checkpoint from the selected task; specify a file or supported selector to override it.
 scripts/play.sh --task Dr02Training-AMP-Recovery-v0
 scripts/play.sh --task Dr02Training-AMP-Recovery-v0 --checkpoint /path/to/model_10000.pt
+
+# Train RGMT from a user-provided multi-clip corpus and play with one environment.
+DR02_RGMT_MOTION_PATH='/data/dr02/rgmt/*.npz' scripts/train.sh \
+  --task Dr02Training-RGMT-Flat-v0 --num-envs 2048
+DR02_RGMT_MOTION_PATH='/data/dr02/rgmt/*.npz' scripts/play.sh \
+  --task Dr02Training-RGMT-Flat-Play-v0 --num-envs 1 --checkpoint /path/to/model_10000.pt
 ```
 
 `train_smoke.sh` runs 1 environment × 1 iteration and then 512 environments × 100 iterations, with distinct run names.
@@ -128,8 +164,8 @@ rm -rf "$HOME/.cache/dr02_training/rsl_rl/dr02-amp-training"
 
 The host output directory is independent and is not removed with the container. The image excludes motion data,
 checkpoints, credentials, and host environments. The container copies the read-only fork checkout to a writable
-temporary directory for its setuptools editable install, installs the mounted project editable without dependency
-resolution, then runs as the host user's numeric UID/GID so new output files remain manageable.
+temporary directory for its setuptools editable install, installs both mounted source packages editable without
+dependency resolution, then runs as the host user's numeric UID/GID so new output files remain manageable.
 
 ## Troubleshooting
 

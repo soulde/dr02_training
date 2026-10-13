@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "task": "dr02_rgmt",
+  "variant": "flat",
+  "robot_profile": "dr02_asset:description/profile.json",
+  "control": {
+    "mode": "position_residual",
+    "action_scale_rad": 0.5,
+    "action_joint_order": [
+      "waist_z_joint",
+      "waist_x_joint",
+      "waist_y_joint",
+      "left_shoulder_y_joint",
+      "left_shoulder_x_joint",
+      "left_shoulder_z_joint",
+      "left_elbow_joint",
+      "left_wrist_z_joint",
+      "left_wrist_y_joint",
+      "left_wrist_x_joint",
+      "right_shoulder_y_joint",
+      "right_shoulder_x_joint",
+      "right_shoulder_z_joint",
+      "right_elbow_joint",
+      "right_wrist_z_joint",
+      "right_wrist_y_joint",
+      "right_wrist_x_joint",
+      "left_hip_y_joint",
+      "left_hip_x_joint",
+      "left_hip_z_joint",
+      "left_knee_joint",
+      "left_ankle_y_joint",
+      "left_ankle_x_joint",
+      "right_hip_y_joint",
+      "right_hip_x_joint",
+      "right_hip_z_joint",
+      "right_knee_joint",
+      "right_ankle_y_joint",
+      "right_ankle_x_joint"
+    ],
+    "actuator_gains": {
+      "waist_z_joint": {
+        "kp": 150.0,
+        "kd": 3.0
+      },
+      "waist_x_joint": {
+        "kp": 150.0,
+        "kd": 3.0
+      },
+      "waist_y_joint": {
+        "kp": 150.0,
+        "kd": 3.0
+      },
+      "left_shoulder_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "left_shoulder_x_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "left_shoulder_z_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "left_elbow_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "left_wrist_z_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "left_wrist_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "left_wrist_x_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "right_shoulder_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "right_shoulder_x_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "right_shoulder_z_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "right_elbow_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "right_wrist_z_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "right_wrist_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "right_wrist_x_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "left_hip_y_joint": {
+        "kp": 500.0,
+        "kd": 8.5
+      },
+      "left_hip_x_joint": {
+        "kp": 500.0,
+        "kd": 8.5
+      },
+      "left_hip_z_joint": {
+        "kp": 180.0,
+        "kd": 4.0
+      },
+      "left_knee_joint": {
+        "kp": 500.0,
+        "kd": 8.5
+      },
+      "left_ankle_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "left_ankle_x_joint": {
+        "kp": 40.0,
+        "kd": 1.0
+      },
+      "right_hip_y_joint": {
+        "kp": 500.0,
+        "kd": 8.5
+      },
+      "right_hip_x_joint": {
+        "kp": 500.0,
+        "kd": 8.5
+      },
+      "right_hip_z_joint": {
+        "kp": 180.0,
+        "kd": 4.0
+      },
+      "right_knee_joint": {
+        "kp": 500.0,
+        "kd": 8.5
+      },
+      "right_ankle_y_joint": {
+        "kp": 100.0,
+        "kd": 2.5
+      },
+      "right_ankle_x_joint": {
+        "kp": 40.0,
+        "kd": 1.0
+      }
+    }
+  },
+  "observations": {
+    "proprio_current": {
+      "shape": [
+        93
+      ],
+      "features": [
+        "projected_gravity_b",
+        "root_ang_vel_b",
+        "joint_pos_rel",
+        "joint_vel",
+        "previous_action"
+      ]
+    },
+    "proprio_history": {
+      "shape": [
+        10,
+        93
+      ],
+      "source": "proprio_current"
+    },
+    "command_window": {
+      "shape": [
+        21,
+        38
+      ],
+      "features": [
+        "anchor_lin_vel_b",
+        "anchor_ang_vel_b",
+        "projected_gravity_b",
+        "joint_pos"
+      ]
+    },
+    "critic_current": {
+      "shape": [
+        93
+      ],
+      "source": "uncorrupted proprio_current"
+    },
+    "critic_history": {
+      "shape": [
+        10,
+        93
+      ],
+      "source": "uncorrupted proprio_history"
+    },
+    "critic_privileged": {
+      "shape": [
+        55
+      ],
+      "features": [
+        "tracked_body_position_relative_to_anchor",
+        "tracked_body_quaternion",
+        "root_lin_vel_b",
+        "root_ang_vel_b"
+      ]
+    }
+  },
+  "policy": {
+    "embedding_dim": 128,
+    "history_length": 10,
+    "command_window_length": 21
+  }
+}

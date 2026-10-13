@@ -16,7 +16,8 @@ fi
 rsl_rl_install_dir="$(mktemp -d /tmp/dr02-rsl-rl.XXXXXX)"
 cp -a -- "${rsl_rl_dir}/." "${rsl_rl_install_dir}/"
 uv pip install --python "${isaaclab_python}" --no-deps --editable "${rsl_rl_install_dir}"
-uv pip install --python "${isaaclab_python}" --no-deps --editable "${project_dir}"
+uv pip install --python "${isaaclab_python}" --no-deps --editable "${project_dir}/source/dr02_asset"
+uv pip install --python "${isaaclab_python}" --no-deps --editable "${project_dir}/source/dr02_training"
 
 if [[ "$(id -u)" == "0" && "${DR02_RUN_UID:-}" =~ ^[0-9]+$ && "${DR02_RUN_GID:-}" =~ ^[0-9]+$ ]]; then
     exec gosu "${DR02_RUN_UID}:${DR02_RUN_GID}" "$@"

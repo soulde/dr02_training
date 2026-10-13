@@ -1,0 +1,18 @@
+[package]
+version = "0.1.0"
+category = "isaaclab"
+readme = "README.md"
+title = "DR02 Asset"
+author = "DR02 Training Contributors"
+maintainer = "DR02 Training Contributors"
+description = "DeepRobotics DR02 Pro asset configuration and source models"
+repository = ""
+keywords = ["isaaclab", "asset", "dr02"]
+
+[dependencies]
+"isaaclab" = {}
+
+[[python.module]]
+name = "dr02_asset"
+
+[isaaclab_settings]

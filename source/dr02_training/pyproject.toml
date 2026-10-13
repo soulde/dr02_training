@@ -1,0 +1,40 @@
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13"]
+build-backend = "uv_build"
+
+[project]
+name = "dr02-training"
+version = "0.1.0"
+description = "Isaac Lab environments for DR02 Pro."
+readme = "README.md"
+license = "BSD-3-Clause"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "dr02-asset",
+    "isaaclab-dev[rsl-rl]",
+    "tensorboard>=2.21.0",
+    "viser>=1.1.1",
+]
+
+[project.scripts]
+dr02-training-train = "dr02_training.cli:train_main"
+dr02-training-play = "dr02_training.cli:play_main"
+
+[project.entry-points."isaaclab.tasks"]
+"dr02_training" = "dr02_training.tasks"
+
+[project.optional-dependencies]
+isaacsim = ["isaaclab-dev[isaacsim]"]
+ov = ["isaaclab-dev[ov]"]
+ovphysx = ["isaaclab-dev[ovphysx]"]
+ovrtx = ["isaaclab-dev[ovrtx]"]
+
+[dependency-groups]
+dev = ["codespell>=2.4", "pre-commit>=4.2", "pytest>=8.3", "ruff>=0.11"]
+
+[tool.uv.sources]
+dr02-asset = { workspace = true }
+
+[tool.uv.build-backend]
+module-name = "dr02_training"
+module-root = "."

@@ -1,42 +1,5 @@
-# Copyright (c) 2022-2026, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
-# All rights reserved.
-#
-# SPDX-License-Identifier: BSD-3-Clause
-
-[build-system]
-requires = ["uv_build>=0.12.6,<0.13"]
-build-backend = "uv_build"
-
-[project]
-name = "dr02_training"
-version = "0.1.0"
-description = "Isaac Lab environments for dr02_training."
-readme = "README.md"
-license = "BSD-3-Clause"
-license-files = ["LICENSE", "licenses/Apache-2.0.txt"]
-authors = [{ name = "Isaac Lab Project Developers" }]
-requires-python = ">=3.12,<3.13"
-dependencies = [
-    "isaaclab-dev[rsl-rl]",
-    "tensorboard>=2.21.0",
-    "viser>=1.1.1",
-]
-
-[project.scripts]
-dr02-training-train = "dr02_training.cli:train_main"
-dr02-training-play = "dr02_training.cli:play_main"
-
-[project.entry-points."isaaclab.tasks"]
-"dr02_training" = "dr02_training.tasks"
-
-[project.optional-dependencies]
-isaacsim = ["isaaclab-dev[isaacsim]"]
-ov = ["isaaclab-dev[ov]"]
-ovphysx = ["isaaclab-dev[ovphysx]"]
-ovrtx = ["isaaclab-dev[ovrtx]"]
-
-[dependency-groups]
-dev = ["codespell>=2.4", "pre-commit>=4.2", "pytest>=8.3", "ruff>=0.11"]
+[tool.uv.workspace]
+members = ["source/dr02_asset", "source/dr02_training"]
 
 [tool.uv]
 index-strategy = "unsafe-best-match"
@@ -54,11 +17,12 @@ override-dependencies = [
     "newton-usd-schemas>=0.4.1",
     "torch==2.11.0",
     "torchvision==0.26.0",
-    "torchaudio==2.11.0",
+    "torchaudio==0.26.0",
     "packaging>=20,<27",
 ]
 
 [tool.uv.sources]
+dr02-asset = { workspace = true }
 "isaaclab" = { path = "../IsaacLab-EA/source/isaaclab", editable = true }
 "isaaclab-assets" = { path = "../IsaacLab-EA/source/isaaclab_assets", editable = true }
 "isaaclab-contrib" = { path = "../IsaacLab-EA/source/isaaclab_contrib", editable = true }
@@ -82,9 +46,6 @@ override-dependencies = [
 "torchaudio" = [{ index = "pytorch-cu128", marker = "sys_platform == 'linux' and platform_machine == 'x86_64'" }, { index = "pytorch-cu128", marker = "sys_platform == 'win32'" }, { index = "pytorch-cu130", marker = "sys_platform == 'linux' and platform_machine == 'aarch64'" }]
 "torchvision" = [{ index = "pytorch-cu128", marker = "sys_platform == 'linux' and platform_machine == 'x86_64'" }, { index = "pytorch-cu128", marker = "sys_platform == 'win32'" }, { index = "pytorch-cu130", marker = "sys_platform == 'linux' and platform_machine == 'aarch64'" }]
 
-[tool.uv.build-backend]
-module-name = "dr02_training"
-
 [tool.ruff]
 line-length = 120
 target-version = "py312"
@@ -93,7 +54,7 @@ target-version = "py312"
 select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["dr02_training"]
+known-first-party = ["dr02_asset", "dr02_training"]
 section-order = [
     "future",
     "standard-library",
@@ -121,7 +82,7 @@ isaaclab = ["isaaclab", "isaaclab_newton", "isaaclab_ov", "isaaclab_physx"]
 docstring-code-format = true
 
 [tool.pyright]
-include = ["src", "scripts", "tests"]
+include = ["source", "scripts", "tests"]
 exclude = ["**/__pycache__", "**/logs", ".git", ".venv", ".vscode"]
 typeCheckingMode = "basic"
 

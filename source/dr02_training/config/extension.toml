@@ -1,0 +1,21 @@
+[package]
+version = "0.1.0"
+category = "isaaclab"
+readme = "README.md"
+title = "DR02 Training"
+author = "DR02 Training Contributors"
+maintainer = "DR02 Training Contributors"
+description = "Isaac Lab tasks and training configurations for DR02 Pro"
+repository = ""
+keywords = ["isaaclab", "training", "dr02"]
+
+[dependencies]
+"isaaclab" = {}
+"isaaclab_assets" = {}
+"isaaclab_rl" = {}
+"isaaclab_tasks" = {}
+
+[[python.module]]
+name = "dr02_training"
+
+[isaaclab_settings]

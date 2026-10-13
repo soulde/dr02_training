@@ -1,0 +1,14 @@
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13"]
+build-backend = "uv_build"
+
+[project]
+name = "dr02-asset"
+version = "0.1.0"
+description = "DR02 Pro robot asset profile, source models, and Isaac Lab adapter."
+requires-python = ">=3.12,<3.13"
+dependencies = ["isaaclab"]
+
+[tool.uv.build-backend]
+module-name = "dr02_asset"
+module-root = "."

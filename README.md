@@ -145,7 +145,9 @@ simulator caches on the host. Training logs/checkpoints go to `DR02_OUTPUT_DIR`.
 `DR02_VISER_PORT` to change the host port. The named container runs in the background and is not replaced if it
 already exists.
 
-Run training or playback inside the running container:
+Run training or playback inside the running container. Docker commands select
+`physics=isaacsim_physx` by default so Kit loads the PhysX schemas before task assets
+are imported. An explicit `physics=...` Hydra override is preserved.
 
 ```bash
 docker/exec.sh dr02-training-train --task Dr02Training-AMP-Recovery-v0

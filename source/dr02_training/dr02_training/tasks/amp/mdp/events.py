@@ -55,8 +55,16 @@ def reset_amp_reference_state(
         root_position[:, 2] += env_origins[:, 2]
     else:
         root_position[:, 2] += _amp_reset_ground_height(env, root_position[:, 0:2], env_ids, terrain_height_sensor)
-    # RSL-RL's RSI contract already returns Isaac Lab's XYZW root quaternion.
-    root_quat_xyzw = reference["root_quat"].to(device=robot.device, dtype=torch.float32)
+    # RSL-RL's RSI quaternion order is versioned in the joint layout. Isaac Sim's
+    # root-pose write API expects XYZW, while current RSL-RL returns WXYZ.
+    root_quat = reference["root_quat"].to(device=robot.device, dtype=torch.float32)
+    quaternion_order = layout.get("quaternion_order")
+    if quaternion_order == "wxyz":
+        root_quat_xyzw = root_quat[:, [1, 2, 3, 0]]
+    elif quaternion_order == "xyzw":
+        root_quat_xyzw = root_quat
+    else:
+        raise ValueError(f"Unsupported AMP RSI quaternion order: {quaternion_order!r}")
     root_velocity = torch.cat(
         (
             reference["root_lin_vel"].to(device=robot.device, dtype=torch.float32),
